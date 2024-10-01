@@ -14,60 +14,34 @@ Abstract: *Diffusion models can learn strong image priors from underlying data d
 * Also see [odl_env.yml](./odlstuff/odl_env.yml) for help on installing ODL package for running CT experiments.
 
 ## Getting started
+First, create a folder called training-runs in the base directory. This will be where checkpoints are stored.
+*Please note that training and reconstruction of colored images is currently not supported but will be updated soon. Thanks for your patience!*
 
 ### Preparing datasets
-Also see [dataset.py](./training/dataset.py) for more 
+The simplest way to use a custom dataset is to use a mat file. As specified on line 81 of [training_loop.py](./training/training_loop.py), the mat file should have a variable called 'images' storing all the grayscale images in a single 3D array. The first two dimensions should be the image size, and the third dimension should be the number of total training images. For larger datasets and other ways to process data, see [dataset.py](./training/dataset.py) for alternate data loader options.
 
 ### Train Patch Diffusion
 
 You can train new models using `train.py`. For example:
 
 ```.bash
-# Train DDPM++ model for CelebA-64x64 using 8 GPUs
-torchrun --standalone --nproc_per_node=8 train.py --outdir=training-runs \
-    --data=datasets/celeba-64x64.zip --cond=0 --arch=ddpmpp --batch=256 \
-    --cres=1,2,2,2 --lr=2e-4 --dropout=0.05 --augment=0 --real_p=0.5
+# Train DDPM++ model using 4 GPUs with batch size of 16
+torchrun --standalone --nproc_per_node=4 train.py --outdir=training-runs --data=mydata --cond=0 --arch=ddpmpp --batch=16 --lr=1e-4 --dropout=0.05 --augment=0 --real_p=0.5 --padding=1 --tick=2 --snap=10 --pad_width=64
 
-# Train ADM model with Latent Diffusion Encoder for LSUN-256x256 using 8 GPUs
-torchrun --standalone --nproc_per_node=8 train.py --outdir=training-runs \
-    --data=datasets/lsun-bedroom-256x256.zip --cond=0 --arch=adm --train_on_latents=1 \
-    --duration=200 --batch-gpu=32 --batch=1024 --lr=1e-4 --ema=50 --dropout=0.10 --fp16=1 --ls=100 \
-    --augment=0 --real_p=0.5
-
-# Train ADM model with Latent Diffusion Encoder for ImageNet-256x256 using 8 GPUs
-torchrun --standalone --nproc_per_node=8 train.py --outdir=training-runs \
-    --data=datasets/imagenet-256x256.zip --cond=1 --arch=adm --train_on_latents=1 \
-    --duration=2500 --batch-gpu=32 --batch=4096 --lr=1e-4 --ema=50 --dropout=0.10 --fp16=1 --ls=100 \
-    --augment=0 --real_p=0.5 --tick=200
 ```
 
-We follow the hyperparameter settings of EDM, and introduce two new parameters here:
+Please see [train.py](./train.py) for more information on the hyperparameters.
 
-- `--real_p`: the ratio of full size image used in the training.
-- `--train_on_latents`: where to train on the Latent Diffusion latent space, instead of the pixel space. Note we trained our models on the latent space for 256x256 images.
+### Image Reconstruction
 
-### Inference Patch Diffusion
-
-You can generate images using `generate.py`. For example:
+After the checkpoint has been trained, perform image reconstruction with `inverse_nodist.py`. Create a new directory called image_dir containing png files consisting of the testing dataset; the reconstruction algorithm will be run on all images inside this directory. For example:
 ```.bash
-# For DDPM++ Architecture we use
-torchrun --standalone --nproc_per_node=8 generate.py --steps=50 --resolution 64 --batch 64 --outdir=fid-tmp --seeds=0-49999 --subdirs --network=/path-to-the-pkl/
+# Perform 20 view CT reconstruction
+python3 inverse_nodist.py --network=training-runs/67-ctaxial/network-snapshot-000800.pkl --outdir=results --image_dir=image_dir --image_size=256 --views=20 --name=ct_parbeam --steps=100 --sigma_min=0.003 --sigma_max=10 --zeta=0.3 --pad=24 --psize=56
 
-# For ADM Architecture we use
-torchrun --standalone --nproc_per_node=8 generate.py --steps=256 --S_churn=40 --S_min=0.05 --S_max=50 --S_noise=1.003 --resolution 32 --on_latents=1 --batch 64 --outdir=fid-tmp --seeds=0-49999 --subdirs --network=/path-to-the-pkl/
 ```
 
 The model checkpoints that we trained will be released soon.
-
-### Calculating FID
-
-To compute Fr&eacute;chet inception distance (FID) for a given model and sampler, first generate 50,000 random images and then compare them against the dataset reference statistics using `fid.py`:
-
-```.bash
-# Generate 50000 images and save them as fid-tmp/*/*.png
-torchrun --standalone --nproc_per_node=1 generate.py --outdir=fid-tmp --seeds=0-49999 --subdirs \
-    --network=https://nvlabs-fi-cdn.nvidia.com/edm/pretrained/edm-cifar10-32x32-cond-vp.pkl
-
 
 ## Citation
 
