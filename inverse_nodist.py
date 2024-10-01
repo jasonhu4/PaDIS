@@ -351,6 +351,3 @@ if __name__ == "__main__":
     main()
 
 #----------------------------------------------------------------------------
-#python3 inverse_nodist.py --network=training-runs/67-ctaxial/network-snapshot-000800.pkl --outdir=results --image_dir=image_dir --image_size=256 --views=20 --name=ct_parbeam --steps=100 --sigma_min=0.002 --sigma_max=0.02 --zeta=0.3 --pad=24 --psize=56
-#python3 inverse_nodist.py --network=training-runs/67-ctaxial/network-snapshot-000800.pkl --outdir=results --image_dir=image_dir --image_size=256 --views=20 --name=ct_parbeam --steps=100 --sigma_min=0.002 --sigma_max=0.02 --zeta=0.3 --pad=24 --psize=56
-#python3 inverse_nodist.py --network=training-runs/00203-aapm_100-uncond-ddpmpp-pedm-gpus3-batch6-fp32/network-snapshot-000140.pkl --outdir=results --image_dir=image_dir --image_size=256 --views=60 --name=ct_parbeam --steps=100 --sigma_min=0.005 --sigma_max=0.05 --zeta=0.3 --pad=64 --psize=64

@@ -24,16 +24,10 @@ class InverseOperator(object):
             self.radon_sv = parbeam([imsize, imsize], views, 512, lact=True)
         elif name == 'deblur_uniform':
             return NotImplementedError
-            self.Amat = compute_blur_kernel(name='uniform', size=blursize)
-            self.ATmat = self.Amat[::-1, ::-1]
-            self.Amat = torch.from_numpy(self.Amat).repeat(3, 1, 1, 1).cuda()
-            self.ATmat = torch.from_numpy(self.ATmat.copy()).repeat(3, 1, 1, 1).cuda()
-            #print('amat size: ', self.Amat.shape)
+
         elif name == 'super':
             return NotImplementedError
-            self.scale = scale_factor
-            self.up_sample = partial(F.interpolate, scale_factor=scale_factor)
-            self.down_sample = Resizer((1, channels, imsize, imsize), 1/scale_factor).cuda()
+
         elif name == 'denoise':
             pass
         else:

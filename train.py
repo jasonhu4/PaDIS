@@ -255,5 +255,3 @@ if __name__ == "__main__":
     main()
 
 #----------------------------------------------------------------------------
-#CUDA_VISIBLE_DEVICES=3 torchrun --standalone --nproc_per_node=1 train.py --outdir=training-runs --data=junk --cond=0 --arch=ddpmpp --batch=2 --lr=1e-4 --dropout=0.05 --augment=0 --real_p=0.5 --padding=1 --tick=2 --snap=10 --pad_width=64
-#torchrun --standalone --nproc_per_node=3 train.py --outdir=training-runs --data=junk --cond=0 --arch=ddpmpp --batch=6 --lr=1e-4 --dropout=0.05 --augment=0 --real_p=0.5 --padding=1 --tick=2 --snap=10 --pad_width=64

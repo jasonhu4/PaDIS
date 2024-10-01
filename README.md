@@ -14,7 +14,8 @@ Abstract: *Diffusion models can learn strong image priors from underlying data d
 * Also see [odl_env.yml](./odlstuff/odl_env.yml) for help on installing ODL package for running CT experiments.
 
 ## Getting started
-First, create a folder called training-runs in the base directory. This will be where checkpoints are stored.
+First, create a folder called `training-runs` in the base directory. This will be where checkpoints are stored.
+
 *Please note that training and reconstruction of colored images is currently not supported but will be updated soon. Thanks for your patience!*
 
 ### Preparing datasets
