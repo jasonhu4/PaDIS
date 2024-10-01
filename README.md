@@ -11,12 +11,12 @@ Abstract: *Diffusion models can learn strong image priors from underlying data d
 
 ## Requirements
 * Python libraries: See [environment.yml](./environment.yml) for exact library dependencies.
-* Also see [odl_env.yml](.odlstuff/odl_env.yml) for help on installing ODL package for running CT experiments.
+* Also see [odl_env.yml](./odlstuff/odl_env.yml) for help on installing ODL package for running CT experiments.
 
 ## Getting started
 
 ### Preparing datasets
-
+Also see [dataset.py](./training/dataset.py) for more 
 
 ### Train Patch Diffusion
 
