@@ -50,14 +50,14 @@ def training_loop(
     resume_state_dump   = None,     # Start from the given training state, None = reset training state.
     resume_kimg         = 0,        # Start from the given training progress.
     cudnn_benchmark     = True,     # Enable torch.backends.cudnn.benchmark?
-    real_p              = 0.5,
-    train_on_latents    = False,
+    real_p              = 0.5,      # Probability of using the largest patch size
+    train_on_latents    = False,    # Always keep as false
     progressive         = False,
-    padding             = 0,
-    pad_width           = 64,
+    padding             = 0,        # Whether to use zero padding
+    pad_width           = 64,       # Width of zero padding on each side
     device              = torch.device('cuda'),
-    four_channels = 1,
-    hash_channels = 1,
+    four_channels = 1,              # Always keep as 1
+    hash_channels = 1,              # Always keep as 1
 ):
     start_time = time.time()
     np.random.seed((seed * dist.get_world_size() + dist.get_rank()) % (1 << 31))
