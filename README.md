@@ -1,5 +1,7 @@
 ## Learning Image Priors through Patch-based Diffusion Models for Solving Inverse Problems<br><sub>Official PyTorch implementation</sub>
 
+Our work has been accepted to [Neurips 2024](https://nips.cc/virtual/2024/poster/95843). 
+
 ![Teaser image](./docs/reconstruction.png)
 
 **Learning Image Priors through Patch-based Diffusion Models for Solving Inverse Problems**<br>
