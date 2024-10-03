@@ -127,43 +127,6 @@ def denoisedFromImage(net, x2, t_hat, psize=64, pad=64, patches=5, imsize=256, w
     out = denoisedFromPatches(net, x, t_hat, latents_pos, label, indices, t_goal=0)
     return out[:,:,pad:imsize+pad, pad:imsize+pad]
 
-def denoiseMultiscale(net, x, t_hat, lpos, class_labels):
-    x_hat = torch.clone(x)
-    latents_pos = torch.clone(lpos)
-    N = len(x_hat[0,0,0,:])
-    channels = len(x_hat[0,:,0,0])
-    psize=64
-    pad = psize
-    patches = 4
-    scale = patches
-    x_hat = x_hat[:,:, psize:N-psize, psize:N-psize]
-    latents_pos = latents_pos[:,:, psize:N-psize, psize:N-psize]
-
-    output = torch.zeros_like(x_hat)
-    x_input = torch.zeros(patches*patches, channels, psize, psize).to(torch.device('cuda'))
-    pos_input = torch.zeros(patches*patches, 2, psize, psize).to(torch.device('cuda'))
-
-    k = 0
-    for i in range(patches):
-        for j in range(patches):
-            indices_row = torch.arange(i, i + psize*scale, scale)
-            indices_col = torch.arange(j, j + psize*scale, scale)
-            xgrid, ygrid = torch.meshgrid(indices_row, indices_col, indexing='ij')
-            x_input[k,:,:,:] = x_hat[0,:, xgrid, ygrid] #should have size 3 64 64 on the RHS
-            pos_input[k,:,:,:] = latents_pos[0, :, xgrid, ygrid]
-            k = k+1
-    bigout = net(x_input, t_hat, pos_input, class_labels).to(torch.float64)
-
-    k = 0
-    for i in range(patches):
-        for j in range(patches):
-            indices_row = torch.arange(i, i + psize*scale, scale)
-            indices_col = torch.arange(j, j + psize*scale, scale)
-            xgrid, ygrid = torch.meshgrid(indices_row, indices_col, indexing='ij')
-            output[0,:, xgrid, ygrid] = bigout[k,:,:,:]
-            k = k+1
-    return torch.nn.functional.pad(output, (pad, pad, pad, pad), "constant", 0)
-
 #from stitching unet paper
 def denoisedTile(net, x, t_hat, latents_pos, class_labels, pad=24, psize=56, overlap = 8, t_goal = -1):
     x_hat = torch.clone(x)
