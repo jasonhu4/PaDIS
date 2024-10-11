@@ -44,7 +44,7 @@ python3 inverse_nodist.py --network=training-runs/67-ctaxial/network-snapshot-00
 
 ```
 
-The model checkpoints that we trained will be released soon.
+Here is one checkpoint for [CT images](https://drive.google.com/file/d/1fJOcqnOw3EFPKj9vX_hdGvB8r-Oz4_yJ/view?usp=sharing).
 
 ## Citation
 
