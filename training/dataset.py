@@ -179,7 +179,7 @@ class ImageFolderDataset5(Dataset):
         self.width = resolution - 2*pad
         #print(self.alldata.shape) #should be N by 256 by 256 by 256
 
-        name = 'what the hell is this'
+        name = 'temp'
         self.directories = os.listdir(path)
         for npfile in self.directories:
             assert npfile[-3:] == 'npy'
@@ -254,7 +254,7 @@ class ImageFolderDataset4(Dataset):
         self.width = resolution - 2*pad
         #print(self.alldata.shape) #should be N by 256 by 256 by 256
 
-        name = 'what the hell is this'
+        name = 'temp'
         self.directories = os.listdir(path)
         for matfile in self.directories:
             assert matfile[:3] == 'CT_' or matfile[:4] == 'data'
